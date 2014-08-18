@@ -85,7 +85,7 @@ class Builder
      * @var string
      * @access protected
      */
-    protected $_querySafety = 'safe';
+    protected $_querySafety = 1;
 
     /**
      * Selects array.
@@ -834,7 +834,7 @@ class Builder
 
         $options = array_merge(
                     array(
-                        $this->_querySafety => true
+                        $this->w =>  1
                     ),
                     $options
                 );
@@ -887,7 +887,7 @@ class Builder
 
         $options = array_merge(
                     array(
-                        $this->_querySafety => true
+                        $this->w => 1
                     ),
                     $options
                 );
@@ -927,7 +927,7 @@ class Builder
         }
 
         try {
-            $options = array_merge(array($this->_querySafety => true,
+            $options = array_merge(array($this->w => 1,
              'multiple' => false), $options);
             $result = $this->_dbhandle->{$collection}->update($this->wheres,
              $this->updates, $options);
@@ -973,7 +973,7 @@ class Builder
         }
 
         try {
-            $options = array_merge(array($this->_querySafety => true,
+            $options = array_merge(array($this->w => 1,
              'multiple' => true), $options);
             $result = $this->_dbhandle->{$collection}->update($this->wheres,
              $this->updates, $options);
@@ -1240,7 +1240,7 @@ class Builder
 
         try {
             $this->_dbhandle->{$collection}->remove($this->wheres,
-             array($this->_querySafety => true, 'justOne' => true));
+             array($this->w => 1, 'justOne' => true));
             $this->_clear($collection, 'delete');
 
             return true;
@@ -1273,7 +1273,7 @@ class Builder
 
         try {
             $this->_dbhandle->{$collection}->remove($this->wheres,
-             array($this->_querySafety => true, 'justOne' => false));
+             array($this->w => 1, 'justOne' => false));
             $this->_clear($collection, 'delete_all');
 
             return true;
@@ -1544,8 +1544,7 @@ class Builder
         $this->_persist = $this->_configData['persist'];
         $this->_persistKey = trim($this->_configData['persist_key']);
         $this->_replicaSet = $this->_configData['replica_set'];
-        $this->_querySafety = trim($this->_configData['query_safety']);
-
+        $this->_w = $this->_configData['query_safety'];
         $parts = parse_url($this->_dsn);
 
         if ( ! isset($parts['path']) OR str_replace('/', '', $parts['path']) === '') {
