@@ -148,6 +148,14 @@ class Builder
     protected $_offset = 0;
 
     /**
+     * Timeout, in milliseconds, for queries
+     *
+     * @var integer
+     * @access protected
+     */
+    protected $_timeout = 30000;
+
+    /**
      * Constructor
      *
      * Automatically check if the Mongo PECL extension has been
@@ -714,6 +722,15 @@ class Builder
     }
 
     /**
+     * Timeout, in milliseconds, for queries
+     *
+     */
+    public function timeout($ms = 30000)
+    {
+        $this->_timeout = $ms;
+        return $this;
+    }
+    /**
     * Get where.
     *
     * Get the documents based upon the passed parameters
@@ -752,6 +769,7 @@ class Builder
                             ->find($this->wheres, $this->_selects)
                             ->limit($this->_limit)
                             ->skip($this->_offset)
+                            ->timeout($this->_timeout)
                             ->sort($this->_sorts);
 
         // Clear
