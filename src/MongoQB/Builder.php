@@ -782,9 +782,9 @@ class Builder
 
         $documents = array();
 
-        while ($cursor->hasNext()) {
+        foreach( $cursor as $doc ) {
             try {
-                $documents[] = $cursor->getNext();
+                $documents[] = $doc;
             }
             // @codeCoverageIgnoreStart
             catch (\MongoCursorException $Exception) {
