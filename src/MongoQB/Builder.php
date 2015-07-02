@@ -804,12 +804,12 @@ class Builder
     * Count the number of found documents
     *
     * @param string $collection Name of the collection
-    * @param array $group_id Group definition of the aggregation
+    * @param array $grouping Group definition of the aggregation
     *
     * @access public
     * @return array
     */
-    public function count($collection = '', $group_id = [] )
+    public function count($collection = '', $grouping = [] )
     {
         if (empty($collection)) {
             throw new \MongoQB\Exception('In order to retrieve a count of
@@ -823,7 +823,7 @@ class Builder
                                 [ '$match' => $this->wheres ],
                                 [ 
                                     '$group' => [ 
-                                        '_id'=>$group_id,
+                                        '_id'=>$grouping,
                                         'count'=> ['$sum' =>1 ]
                                     ]
                                 ]
@@ -831,7 +831,11 @@ class Builder
                         );
         
         $this->_clear($collection, 'count');
-        return $count['result'];
+        if ( count($grouping) == 0 ) {
+            return $count['result'][0]['count'];
+        } else {
+            return $count['result'];
+        }
     }
 
     /**
