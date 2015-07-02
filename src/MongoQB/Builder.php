@@ -809,7 +809,7 @@ class Builder
     * @access public
     * @return array
     */
-    public function count($collection = '', $group_id = '')
+    public function count($collection = '', $group_id = [] )
     {
         if (empty($collection)) {
             throw new \MongoQB\Exception('In order to retrieve a count of
