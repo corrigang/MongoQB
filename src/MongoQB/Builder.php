@@ -804,11 +804,12 @@ class Builder
     * Count the number of found documents
     *
     * @param string $collection Name of the collection
+    * @param array $group_id Group definition of the aggregation
     *
     * @access public
-    * @return int
+    * @return array
     */
-    public function count($collection = '')
+    public function count($collection = '', $group_id = '')
     {
         if (empty($collection)) {
             throw new \MongoQB\Exception('In order to retrieve a count of
@@ -817,14 +818,20 @@ class Builder
 
         $count = $this->_dbhandle
                         ->{$collection}
-                        ->find($this->wheres)
-                        ->limit($this->_limit)
-                        ->skip($this->_offset)
-                        ->count();
-
+                        ->aggregate(
+                            [
+                                [ '$match' => $this->wheres ],
+                                [ 
+                                    '$group' => [ 
+                                        '_id'=>$group_id,
+                                        'count'=> ['$sum' =>1 ]
+                                    ]
+                                ]
+                            ]
+                        );
+        
         $this->_clear($collection, 'count');
-
-        return $count;
+        return $count['result'];
     }
 
     /**
