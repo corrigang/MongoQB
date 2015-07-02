@@ -764,33 +764,35 @@ class Builder
              MongoDB, a collection name must be passed');
         }
 
-        $cursor = $this->_dbhandle
-                            ->{$collection}
-                            ->find($this->wheres, $this->_selects)
-                            ->limit($this->_limit)
-                            ->skip($this->_offset)
-                            ->timeout($this->_timeout)
-                            ->sort($this->_sorts);
+        try {
 
-        // Clear
-        $this->_clear($collection, 'get');
+            $cursor = $this->_dbhandle
+                                ->{$collection}
+                                ->find($this->wheres, $this->_selects)
+                                ->limit($this->_limit)
+                                ->skip($this->_offset)
+                                ->timeout($this->_timeout)
+                                ->sort($this->_sorts);
 
-        // Return the raw cursor if wanted
-        if ($returnCursor === true) {
-            return $cursor;
-        }
+            // Clear
+            $this->_clear($collection, 'get');
 
-        $documents = array();
+            // Return the raw cursor if wanted
+            if ($returnCursor === true) {
+                return $cursor;
+            }
 
-        foreach( $cursor as $doc ) {
-            try {
+            $documents = array();
+
+            foreach( $cursor as $doc ) {
                 $documents[] = $doc;
             }
-            // @codeCoverageIgnoreStart
-            catch (\MongoCursorException $Exception) {
+        }
+
+        // @codeCoverageIgnoreStart
+        catch (\MongoCursorException $Exception) {
                 throw new \MongoQB\Exception($Exception->getMessage());
                 // @codeCoverageIgnoreEnd
-            }
         }
 
         return $documents;
