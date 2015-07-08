@@ -832,7 +832,11 @@ class Builder
         
         $this->_clear($collection, 'count');
         if ( count($grouping) == 0 ) {
-            return $count['result'][0]['count'];
+            if (count( $count['result'] )) {
+                return $count['result'][0]['count'];
+            } else{
+                return 0;
+            }
         } else {
             return $count['result'];
         }
