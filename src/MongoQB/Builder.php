@@ -129,7 +129,7 @@ class Builder
      * @var integer
      * @access protected
      */
-    protected $_limit = 999999;
+    protected $_limit = 99999999;
 
     /**
      * Query log.
@@ -1612,7 +1612,7 @@ class Builder
         $this->_selects = array();
         $this->updates  = array();
         $this->wheres   = array();
-        $this->_limit   = 999999;
+        $this->_limit   = 99999999;
         $this->_offset  = 0;
         $this->_sorts   = array();
     }
