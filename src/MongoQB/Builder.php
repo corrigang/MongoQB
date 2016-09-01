@@ -1541,6 +1541,7 @@ class Builder
             if (phpversion('Mongo') >= 1.3)
             {
                 unset($options['persist']);
+                $options = [ 'readPreference' => \MongoClient::RP_PRIMARY ];
                 $this->_connection = new \MongoClient($this->_dsn, $options);
                 $this->_dbhandle = $this->_connection->{$this->_dbname};
             }
